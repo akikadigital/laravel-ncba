@@ -58,6 +58,10 @@ $ncba = new Ncba();
 $ncba->checkApiHealth();
 ```
 
+#### Response
+
+Returns a String response, either `Healthy` or `Not Healthy`.
+
 ### Check Transaction Status
 
 ```php
