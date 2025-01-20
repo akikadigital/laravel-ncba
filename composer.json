@@ -1,0 +1,44 @@
+{
+    "name": "akika/laravel-ncba",
+    "description": "A cool NCBA API package for Laravel supporting Laravel version 5 and above.",
+    "homepage": "https://github.com/Akika-Digital/laravel-ncba",
+    "type": "library",
+    "keywords": [
+        "ncba",
+        "ncba php",
+        "ncba laravel",
+        "ncba open banking",
+        "payment",
+        "Akika",
+        "Digital"
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0|^8.1|^8.2",
+        "illuminate/support": "^8.0 | ^9.0 | ^10.0 | ^11.0",
+		"illuminate/http":"^8.0 | ^9.0 | ^10.0 | ^11.0",
+		"guzzlehttp/guzzle": "^7.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Akika\\LaravelNCBA\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Felix Nyabwari",
+            "email": "fenicfelix@gmail.com"
+        }
+    ],
+    "extra": {
+		"laravel": {
+			"providers": [
+				"Akika\\LaravelNCBA\\MpesaServiceProvider"
+			],
+			"aliases": {
+				"NCBA": "Akika\\LaravelNCBA\\Facades\\Ncba"
+			}
+		}
+  	}
+}
