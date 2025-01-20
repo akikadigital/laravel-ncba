@@ -47,10 +47,16 @@ use Akika\LaravelNcba\Ncba;
 
 $ncba = new Ncba();
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
-
 ```
 
 NCBA class can be initialized in either of the 2 ways shown above. However, to perform a transaction, use the second initialization formula.
+
+```php
+$bankCode # Bank specific code
+$branchCode # Branch specific code
+$country # Country name in full e.g. Kenya
+$currency # Currency code e.g. KES
+```
 
 ### Check API Health
 
