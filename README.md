@@ -37,3 +37,70 @@ Note:
 ## Function Responses
 
 All responses, except health checker API, return a json string. The health checker API returns a string.
+
+## Usage
+
+### Initialize NCBA
+
+```php
+use Akika\LaravelNcba\Ncba;
+
+$ncba = new Ncba();
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+
+```
+
+NCBA class can be initialized in either of the 2 ways shown above. However, to perform a transaction, use the second initialization formula.
+
+### Check API Health
+
+```php
+$ncba = new Ncba();
+$ncba->checkApiHealth();
+```
+
+### Check Transaction Status
+
+```php
+$ncba = new Ncba();
+$response = $ncba->checkTransactionStatus($referenceNumber);
+```
+
+### MPesa Phone Number Validation
+
+```php
+$ncba = new Ncba();
+$response = $ncba->mpesaNumberValidation($phoneNumber, $reference);
+```
+
+### Send Money to Another NCBA Customer
+
+```php
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+$response = $ncba->ift($beneficiaryAccountName, $reference, $account, $amount, $narration);
+```
+
+### Send Money to a Non-NCBA Customer
+
+```php
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+$response = $ncba->eft($beneficiaryAccountName, $reference, $account, $amount, $narration);
+```
+
+### Send Money via RTGS
+
+```php
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+$response = $ncba->rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration);
+```
+
+### Send Money via Pesalink
+
+```php
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+$response = $ncba->pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration);
+```
+
+## License
+
+The Laravel NCBA package is open-sourced software licensed under the MIT license. See the LICENSE file for details.

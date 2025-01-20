@@ -42,6 +42,86 @@ class Ncba
     }
 
     /**
+     * Allows sending money to a bank account via IFT
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $reference - the reference number
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $narration - the narration or description or reason
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
+
+    public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
+    {
+        /// prepare the data
+        $data = [
+            "TranType" => "Internal",
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference,
+            "Account" => $account,
+            "Amount" => $amount,
+            "Narration" => $narration,
+        ];
+
+        /// make the request
+        $result = $this->makeRequest($this->url . '/ift', $data);
+
+        /// log the request and response
+        if ($this->debugMode) {
+            info('ift request: ' . json_encode($data));
+            info('ift response: ' . $result->json());
+        }
+
+        /// return the result
+        return $result;
+    }
+
+    /**
+     * Allows sending money to a bank account via EFT
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $reference - the reference number
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $narration - the narration or description or reason
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
+
+    public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
+    {
+        /// prepare the data
+        $data = [
+            "TranType" => "Eft",
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference,
+            "Account" => $account,
+            "Amount" => $amount,
+            "Narration" => $narration,
+        ];
+
+        /// make the request
+        $result = $this->makeRequest($this->url . '/eft', $data);
+
+        /// log the request and response
+        if ($this->debugMode) {
+            info('eft request: ' . json_encode($data));
+            info('eft response: ' . $result->json());
+        }
+
+        /// return the result
+        return $result;
+    }
+
+    /**
      * Allows sending money to a bank account via RTGS
      * @param string $beneficiaryAccountName - the name of the account holder
      * @param string $account - the account number to send to
@@ -118,86 +198,6 @@ class Ncba
         if ($this->debugMode) {
             info('pesalink request: ' . json_encode($data));
             info('pesalink response: ' . $result->json());
-        }
-
-        /// return the result
-        return $result;
-    }
-
-    /**
-     * Allows sending money to a bank account via IFT
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $reference - the reference number
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $narration - the narration or description or reason
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
-    {
-        /// prepare the data
-        $data = [
-            "TranType" => "Internal",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Reference" => $reference,
-            "Account" => $account,
-            "Amount" => $amount,
-            "Narration" => $narration,
-        ];
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/ift', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('ift request: ' . json_encode($data));
-            info('ift response: ' . $result->json());
-        }
-
-        /// return the result
-        return $result;
-    }
-
-    /**
-     * Allows sending money to a bank account via EFT
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $reference - the reference number
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $narration - the narration or description or reason
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
-    {
-        /// prepare the data
-        $data = [
-            "TranType" => "Eft",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Reference" => $reference,
-            "Account" => $account,
-            "Amount" => $amount,
-            "Narration" => $narration,
-        ];
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/eft', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('eft request: ' . json_encode($data));
-            info('eft response: ' . $result->json());
         }
 
         /// return the result
