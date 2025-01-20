@@ -4,7 +4,7 @@ namespace Akika\LaravelNcba\Traits;
 
 use Illuminate\Support\Facades\Http;
 
-trait NcbaTrait
+trait NcbaConnect
 {
     function makeRequest($url, $data, $method = 'POST')
     {

@@ -2,11 +2,11 @@
 
 namespace Akika\LaravelNcba;
 
-use Akika\LaravelNcba\Traits\NcbaTrait;
+use Akika\LaravelNcba\Traits\NcbaConnect;
 
 class Ncba
 {
-    use NcbaTrait;
+    use NcbaConnect;
 
     protected $environment;
     protected $debugMode;
