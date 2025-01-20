@@ -52,6 +52,7 @@ class Ncba
 
     public function rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration)
     {
+        /// prepare the data
         $data = [
             "TranType" => "RTGS",
             "Account" => $account,
@@ -67,9 +68,17 @@ class Ncba
             "Narration" => $narration,
         ];
 
+        /// make the request
+        $result = $this->makeRequest($this->url . '/rtgs', $data);
+
+        /// log the request and response
         if ($this->debugMode) {
             info('rtgs request: ' . compact('data'));
+            info('rtgs response: ' . $result->json());
         }
+
+        /// return the result
+        return $result;
     }
 
     /*
@@ -83,6 +92,7 @@ class Ncba
 
     public function pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
+        /// prepare the data
         $data = [
             "TranType" => "Pesalink",
             "BankCode" => $this->bankCode,
@@ -96,9 +106,17 @@ class Ncba
             "Narration" => $narration
         ];
 
+        /// make the request
+        $result = $this->makeRequest($this->url . '/pesalink', $data);
+
+        /// log the request and response
         if ($this->debugMode) {
             info('pesalink request: ' . compact('data'));
+            info('pesalink response: ' . $result->json());
         }
+
+        /// return the result
+        return $result;
     }
 
     /**
@@ -112,6 +130,7 @@ class Ncba
 
     public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
+        /// prepare the data
         $data = [
             "TranType" => "Internal",
             "BankCode" => $this->bankCode,
@@ -125,9 +144,17 @@ class Ncba
             "Narration" => $narration,
         ];
 
+        /// make the request
+        $result = $this->makeRequest($this->url . '/ift', $data);
+
+        /// log the request and response
         if ($this->debugMode) {
             info('ift request: ' . compact('data'));
+            info('ift response: ' . $result->json());
         }
+
+        /// return the result
+        return $result;
     }
 
     /**
@@ -141,6 +168,7 @@ class Ncba
 
     public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
+        /// prepare the data
         $data = [
             "TranType" => "Eft",
             "BankCode" => $this->bankCode,
@@ -154,13 +182,22 @@ class Ncba
             "Narration" => $narration,
         ];
 
+        /// make the request
+        $result = $this->makeRequest($this->url . '/eft', $data);
+
+        /// log the request and response
         if ($this->debugMode) {
             info('eft request: ' . compact('data'));
+            info('eft response: ' . $result->json());
         }
+
+        /// return the result
+        return $result;
     }
 
     public function mpesa($reference, $amount, $account, $narration, $transactionId)
     {
+        /// prepare the data
         $data = [
             "TranType" => "Mpesa",
             "BankCode" => $this->bankCode,
@@ -175,23 +212,80 @@ class Ncba
             "Validation ID" => $transactionId, // "SFE0FNOXCI"
         ];
 
+        /// make the request
+        $result = $this->makeRequest($this->url . '/mpesa', $data);
+
+        /// log the request and response
         if ($this->debugMode) {
             info('mpesa request: ' . compact('data'));
+            info('mpesa response: ' . $result->json());
         }
+
+        /// return the result
+        return $result;
     }
 
     public function checkApiHealth()
     {
-        // send a get request
+        /// prepare the data
         $data = [
             "apiKey" => $this->apiKey
         ];
 
-        $response = $this->makeRequest($this->url . '/health', $data, 'GET');
+        /// make the request
+        $result = $this->makeRequest($this->url . '/health', $data, 'GET');
 
+        /// log the request and response
         if ($this->debugMode) {
             info('checkApiHealth request: ' . compact('data'));
-            info('checkApiHealth response: ' . $response->json());
+            info('checkApiHealth response: ' . $result->json());
         }
+
+        /// return the result
+        return $result; // Healthy
+    }
+
+    public function checkTransactionStatus($referenceNumber)
+    {
+
+        /// prepare the data
+        $data = [
+            "country" => $this->country,
+            "referenceNumber" => $referenceNumber
+        ];
+
+        /// make the request
+        $result = $this->makeRequest($this->url . '/TransactionQuery', $data, 'GET');
+
+        /// log the request and response
+        if ($this->debugMode) {
+            info('checkTransactionStatus request: ' . compact('data'));
+            info('checkTransactionStatus response: ' . $result->json());
+        }
+
+        /// return the result
+        return $result;
+    }
+
+    public function mpesaNumberValidation($phoneNumber, $reference)
+    {
+
+        /// prepare the data
+        $data = [
+            "Mobile Number" => $phoneNumber,
+            "Reference" => $reference
+        ];
+
+        /// make the request
+        $result = $this->makeRequest($this->url . '/MpesaPhoneNumberValidation', $data, 'GET');
+
+        /// log the request and response
+        if ($this->debugMode) {
+            info('mpesaNumberValidation request: ' . compact('data'));
+            info('mpesaNumberValidation response: ' . $result->json());
+        }
+
+        /// return the result
+        return $result;
     }
 }
