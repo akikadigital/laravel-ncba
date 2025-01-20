@@ -2,11 +2,10 @@
 
 namespace Akika\LaravelNcba;
 
-use Akika\LaravelNcba\Traits\NcbaConnect;
+use Illuminate\Support\Facades\Http;
 
 class Ncba
 {
-    use NcbaConnect;
 
     protected $environment;
     protected $debugMode;
@@ -76,7 +75,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('rtgs request: ' . compact('data'));
+            info('rtgs request: ' . json_encode($data));
             info('rtgs response: ' . $result->json());
         }
 
@@ -116,7 +115,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('pesalink request: ' . compact('data'));
+            info('pesalink request: ' . json_encode($data));
             info('pesalink response: ' . $result->json());
         }
 
@@ -156,7 +155,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('ift request: ' . compact('data'));
+            info('ift request: ' . json_encode($data));
             info('ift response: ' . $result->json());
         }
 
@@ -196,7 +195,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('eft request: ' . compact('data'));
+            info('eft request: ' . json_encode($data));
             info('eft response: ' . $result->json());
         }
 
@@ -238,7 +237,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('mpesa request: ' . compact('data'));
+            info('mpesa request: ' . json_encode($data));
             info('mpesa response: ' . $result->json());
         }
 
@@ -259,13 +258,15 @@ class Ncba
             "apiKey" => $this->apiKey
         ];
 
+        info($this->url . '/health');
+
         /// make the request
         $result = $this->makeRequest($this->url . '/health', $data, 'GET');
 
         /// log the request and response
         if ($this->debugMode) {
-            info('checkApiHealth request: ' . compact('data'));
-            info('checkApiHealth response: ' . $result->json());
+            info('checkApiHealth request: ' . json_encode($data));
+            info('checkApiHealth response: ' . $result);
         }
 
         /// return the result
@@ -293,7 +294,7 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('checkTransactionStatus request: ' . compact('data'));
+            info('checkTransactionStatus request: ' . json_encode($data));
             info('checkTransactionStatus response: ' . $result->json());
         }
 
@@ -323,11 +324,40 @@ class Ncba
 
         /// log the request and response
         if ($this->debugMode) {
-            info('mpesaNumberValidation request: ' . compact('data'));
+            info('mpesaNumberValidation request: ' . json_encode($data));
             info('mpesaNumberValidation response: ' . $result->json());
         }
 
         /// return the result
         return $result;
+    }
+
+    /**
+     * 
+     * Performs a request to the API
+     * @param string $url - the URL to send the request to
+     * @param array $data - the data to send
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
+
+    private function makeRequest($url, $data, $method = 'POST')
+    {
+
+        $response = Http::withHeaders([
+            'apiKey' => $this->apiKey
+        ])->acceptJson();
+
+
+        if ($this->debugMode) info('makeRequest url: ' . $url);
+        if ($this->debugMode) info('makeRequest data: ' . json_encode($data));
+
+        if ($method == 'GET') {
+            $response = $response->get($url, $data);
+        } else {
+            $response = $response->post($url, $data);
+        }
+
+        return $response;
     }
 }
