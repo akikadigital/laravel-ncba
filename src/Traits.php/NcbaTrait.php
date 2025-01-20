@@ -1,6 +1,6 @@
 <?php
 
-namespace Akika\LaravelNCBA\Traits;
+namespace Akika\LaravelNcba\Traits;
 
 use Illuminate\Support\Facades\Http;
 

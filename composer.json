@@ -22,7 +22,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Akika\\LaravelNCBA\\": "src/"
+            "Akika\\LaravelNcba\\": "src/" 
         }
     },
     "authors": [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Akika\LaravelNCBA;
+namespace Akika\LaravelNcba;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -25,17 +25,17 @@ class NcbaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Load package migrations
+        /// Load the routes
         if ($this->app->runningInConsole()) {
 
-            // Publish the ncba config file
+            /// Publish the ncba config file
             $this->publishes([
                 __DIR__ . '/../config/ncba.php' => config_path('ncba.php')
-            ], 'config'); // Register InstallAkikaNcbaLaravelPackage command
+            ], 'config'); /// php artisan vendor:publish --tag=config
 
-            // Register InstallAkikaNcbaLaravelPackage command
+            /// Publish the ncba migrations
             $this->commands([
-                Commands\InstallAkikaNCBALaravelPackage::class,
+                Commands\InstallAkikaNcbaLaravelPackage::class,
             ]);
         }
     }

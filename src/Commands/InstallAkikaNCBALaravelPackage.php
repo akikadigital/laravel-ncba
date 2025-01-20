@@ -1,10 +1,10 @@
 <?php
 
-namespace Akika\LaravelNCBA\Commands;
+namespace Akika\LaravelNcba\Commands;
 
 use Illuminate\Console\Command;
 
-class InstallAkikaNCBALaravelPackage extends Command
+class InstallAkikaNcbaLaravelPackage extends Command
 {
     /**
      * The name and signature of the console command.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Akika\LaravelNCBA\Facades;
+namespace Akika\LaravelNcba\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

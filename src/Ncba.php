@@ -1,8 +1,8 @@
 <?php
 
-namespace Akika\LaravelNCBA;
+namespace Akika\LaravelNcba;
 
-use Akika\LaravelNCBA\Traits\NcbaTrait;
+use Akika\LaravelNcba\Traits\NcbaTrait;
 
 class Ncba
 {
@@ -14,29 +14,57 @@ class Ncba
 
     protected $apiKey;
 
-    public function __construct()
+    protected $bankCode;
+    protected $branchCode;
+    protected $country;
+    protected $currency;
+
+    /**
+     * Ncba constructor.
+     * @param null $bankCode
+     * @param null $branchCode
+     * @param null $country
+     * @param null $currency
+     */
+
+    public function __construct($bankCode = null, $branchCode = null, $country = null, $currency = null)
     {
         $this->environment = config('ncba.env');
         $this->debugMode = config('ncba.debug');
         $this->apiKey = config('ncba.' . $this->environment . '.api_key');
         $this->url = config('ncba.' . $this->environment . '.url');
+
+        $this->bankCode = $bankCode;
+        $this->branchCode = $branchCode;
+        $this->country = $country;
+        $this->currency = $currency;
     }
 
-    public function rtgs()
+    /**
+     * Allows sending money to a bank account via RTGS
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $purposeCode - the purpose code
+     * @param string $reference - the reference number
+     * @param string $narration - the narration or description or reason
+     */
+
+    public function rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration)
     {
         $data = [
-            "Account" => "34456344",
-            "Amount" => 455,
-            "BankCode" => "68",
+            "TranType" => "RTGS",
+            "Account" => $account,
+            "Amount" => $amount,
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
             "BankSwiftCode" => "EQBLKENA",
-            "BeneficiaryAccountName" => "sims tiida",
-            "BranchCode" => "000",
-            "Country" => "Kenya",
-            "Currency" => "KES",
-            "Narration" => "DDF434",
-            "PurposeCode" => 1002,
-            "Reference" => "TRIM009s234dds",
-            "TranType" => "RTGS"
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "PurposeCode" => $purposeCode,
+            "Reference" => $reference,
+            "Narration" => $narration,
         ];
 
         if ($this->debugMode) {
@@ -44,19 +72,28 @@ class Ncba
         }
     }
 
-    public function pesalink()
+    /*
+    * Allows sending money to a bank account via Pesalink
+    * @param string $beneficiaryAccountName - the name of the account holder
+    * @param string $reference - the reference number
+    * @param string $account - the account number to send to
+    * @param double $amount - the amount to send
+    * @param string $narration - the narration or description or reason
+    */
+
+    public function pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
         $data = [
-            "BankCode" => "404",
-            "BranchCode" => "11000",
-            "BeneficiaryAccountName" => "JANE DOE",
-            "Country" => "Kenya",
             "TranType" => "Pesalink",
-            "Reference" => "GENERIC",
-            "Currency" => "KES",
-            "Account" => "1234567890",
-            "Amount" => 2300,
-            "Narration" => "GENERIC"
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference,
+            "Account" => $account,
+            "Amount" => $amount,
+            "Narration" => $narration
         ];
 
         if ($this->debugMode) {
@@ -64,19 +101,28 @@ class Ncba
         }
     }
 
-    public function ift()
+    /**
+     * Allows sending money to a bank account via IFT
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $reference - the reference number
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $narration - the narration or description or reason
+     */
+
+    public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
         $data = [
-            "BankCode" => "07",
-            "BranchCode" => "000",
-            "BeneficiaryAccountName" => "STRING",
-            "Country" => "Kenya",
             "TranType" => "Internal",
-            "Reference" => "STRING",
-            "Currency" => "STRING",
-            "Account" => "4376410044",
-            "Amount" => "STRING",
-            "Narration" => "STRING",
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference,
+            "Account" => $account,
+            "Amount" => $amount,
+            "Narration" => $narration,
         ];
 
         if ($this->debugMode) {
@@ -84,19 +130,28 @@ class Ncba
         }
     }
 
-    public function eft()
+    /**
+     * Allows sending money to a bank account via EFT
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $reference - the reference number
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $narration - the narration or description or reason
+     */
+
+    public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
     {
         $data = [
-            "BankCode" => "XX",
-            "BranchCode" => "XXX",
-            "BeneficiaryAccountName" => "STRING",
-            "Country" => "Kenya",
             "TranType" => "Eft",
-            "Reference" => "STRING",
-            "Currency" => "KES",
-            "Account" => "STRING",
-            "Amount" => "XXX",
-            "Narration" => "STRING",
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference,
+            "Account" => $account,
+            "Amount" => $amount,
+            "Narration" => $narration,
         ];
 
         if ($this->debugMode) {
@@ -104,20 +159,20 @@ class Ncba
         }
     }
 
-    public function mpesa()
+    public function mpesa($reference, $amount, $account, $narration, $transactionId)
     {
         $data = [
-            "BankCode" => "99",
-            "BranchCode" => "002",
-            "BeneficiaryAccountName" => "DAVID NGIGI WANYOIKE",
-            "Country" => "Kenya",
             "TranType" => "Mpesa",
-            "Reference" => "SAMARA WANJIRU",
-            "Currency" => "KES",
-            "Account" => "254714527786",
-            "Amount" => 12000,
-            "Narration" => "WATER BILL AND SANITATIONV00688",
-            "Validation ID" => "SFE0FNOXCI"
+            "BankCode" => $this->bankCode,
+            "BranchCode" => $this->branchCode,
+            "BeneficiaryAccountName" => "DAVID NGIGI WANYOIKE",
+            "Country" => $this->country, // "Kenya",
+            "Currency" => $this->currency, // "KES",
+            "Reference" => $reference, // "SAMARA WANJIRU",
+            "Account" => $account, // "254714527786",
+            "Amount" => ceil($amount), // 12000,
+            "Narration" => $narration, //"WATER BILL AND SANITATIONV00688",
+            "Validation ID" => $transactionId, // "SFE0FNOXCI"
         ];
 
         if ($this->debugMode) {
