@@ -38,6 +38,10 @@ class Ncba
             "Reference" => "TRIM009s234dds",
             "TranType" => "RTGS"
         ];
+
+        if ($this->debugMode) {
+            info('rtgs request: ' . compact('data'));
+        }
     }
 
     public function pesalink()
@@ -54,6 +58,10 @@ class Ncba
             "Amount" => 2300,
             "Narration" => "GENERIC"
         ];
+
+        if ($this->debugMode) {
+            info('pesalink request: ' . compact('data'));
+        }
     }
 
     public function ift()
@@ -70,6 +78,10 @@ class Ncba
             "Amount" => "STRING",
             "Narration" => "STRING",
         ];
+
+        if ($this->debugMode) {
+            info('ift request: ' . compact('data'));
+        }
     }
 
     public function eft()
@@ -86,6 +98,10 @@ class Ncba
             "Amount" => "XXX",
             "Narration" => "STRING",
         ];
+
+        if ($this->debugMode) {
+            info('eft request: ' . compact('data'));
+        }
     }
 
     public function mpesa()
@@ -103,13 +119,24 @@ class Ncba
             "Narration" => "WATER BILL AND SANITATIONV00688",
             "Validation ID" => "SFE0FNOXCI"
         ];
+
+        if ($this->debugMode) {
+            info('mpesa request: ' . compact('data'));
+        }
     }
 
     public function checkApiHealth()
     {
         // send a get request
         $data = [
-            "apiKey" => "T3st123"
+            "apiKey" => $this->apiKey
         ];
+
+        $response = $this->makeRequest($this->url . '/health', $data, 'GET');
+
+        if ($this->debugMode) {
+            info('checkApiHealth request: ' . compact('data'));
+            info('checkApiHealth response: ' . $response->json());
+        }
     }
 }
