@@ -12,11 +12,3 @@ return [
         'url' => 'https://ncbagroup.com/api',
     ],
 ];
-
-// Variables
-/*
-    NCBA_ENV
-    NCBA_DEBUG
-    NCBA_SANDBOX_API_KEY
-    NCBA_API_KEY
- */
