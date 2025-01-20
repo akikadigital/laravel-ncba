@@ -195,18 +195,18 @@ class Ncba
         return $result;
     }
 
-    public function mpesa($reference, $amount, $account, $narration, $transactionId)
+    public function mpesa($beneficiaryAccountName, $reference, $amount, $account, $narration, $transactionId)
     {
         /// prepare the data
         $data = [
             "TranType" => "Mpesa",
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => "DAVID NGIGI WANYOIKE",
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
-            "Reference" => $reference, // "SAMARA WANJIRU",
-            "Account" => $account, // "254714527786",
+            "Reference" => $reference, // "John Doe",
+            "Account" => $account, // "254712345678",
             "Amount" => ceil($amount), // 12000,
             "Narration" => $narration, //"WATER BILL AND SANITATIONV00688",
             "Validation ID" => $transactionId, // "SFE0FNOXCI"
