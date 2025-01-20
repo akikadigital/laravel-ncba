@@ -25,6 +25,7 @@ class Ncba
      * @param null $branchCode
      * @param null $country
      * @param null $currency
+     * 
      */
 
     public function __construct($bankCode = null, $branchCode = null, $country = null, $currency = null)
@@ -48,6 +49,8 @@ class Ncba
      * @param string $purposeCode - the purpose code
      * @param string $reference - the reference number
      * @param string $narration - the narration or description or reason
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
     public function rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration)
@@ -88,6 +91,8 @@ class Ncba
     * @param string $account - the account number to send to
     * @param double $amount - the amount to send
     * @param string $narration - the narration or description or reason
+    * 
+    * @return mixed - The result of the request: \Illuminate\Http\Client\Response
     */
 
     public function pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration)
@@ -126,6 +131,8 @@ class Ncba
      * @param string $account - the account number to send to
      * @param double $amount - the amount to send
      * @param string $narration - the narration or description or reason
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
     public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
@@ -164,6 +171,8 @@ class Ncba
      * @param string $account - the account number to send to
      * @param double $amount - the amount to send
      * @param string $narration - the narration or description or reason
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
     public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
@@ -195,6 +204,18 @@ class Ncba
         return $result;
     }
 
+    /**
+     * Allows sending money to a bank account via MPESA
+     * @param string $beneficiaryAccountName - the name of the account holder
+     * @param string $reference - the reference number
+     * @param string $account - the account number to send to
+     * @param double $amount - the amount to send
+     * @param string $narration - the narration or description or reason
+     * @param string $transactionId - the transaction ID
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
+
     public function mpesa($beneficiaryAccountName, $reference, $amount, $account, $narration, $transactionId)
     {
         /// prepare the data
@@ -225,6 +246,12 @@ class Ncba
         return $result;
     }
 
+    /**
+     * Checks the health of the API
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
+
     public function checkApiHealth()
     {
         /// prepare the data
@@ -244,6 +271,13 @@ class Ncba
         /// return the result
         return $result; // Healthy
     }
+
+    /**
+     * Checks the status of a transaction
+     * @param string $referenceNumber - the reference number
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
 
     public function checkTransactionStatus($referenceNumber)
     {
@@ -266,6 +300,14 @@ class Ncba
         /// return the result
         return $result;
     }
+
+    /**
+     * Validates phone numbr through Mpesa
+     * @param string $phoneNumber - the phone number
+     * @param string $reference - the reference number
+     * 
+     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     */
 
     public function mpesaNumberValidation($phoneNumber, $reference)
     {
