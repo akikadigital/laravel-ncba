@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 trait NcbaTrait
 {
-    public function makeRequest($url, $data, $method = 'POST')
+    function makeRequest($url, $data, $method = 'POST')
     {
         $response = Http::acceptJson();
 
