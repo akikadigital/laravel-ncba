@@ -13,7 +13,7 @@ class NcbaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('mpesa', function () {
+        $this->app->bind('ncba', function () {
             return new Ncba();
         });
     }

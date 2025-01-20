@@ -34,7 +34,7 @@
     "extra": {
 		"laravel": {
 			"providers": [
-				"Akika\\LaravelNCBA\\MpesaServiceProvider"
+				"Akika\\LaravelNCBA\\NcbaServiceProvider"
 			],
 			"aliases": {
 				"NCBA": "Akika\\LaravelNCBA\\Facades\\Ncba"

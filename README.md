@@ -14,7 +14,7 @@ After installing the package, publish the configuration file using the following
 php artisan ncba:install
 ```
 
-This will generate a mpesa.php file in your config directory where you can set your Mpesa credentials and other configuration options.
+This will generate a ncba.php file in your config directory where you can set your NCBA credentials and other configuration options.
 
 ## .env file Setup
 
