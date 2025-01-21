@@ -69,7 +69,7 @@ class Ncba
         ];
 
         /// make the request
-        $result = $this->makeRequest($this->url . '/ift', $data);
+        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
 
         /// log the request and response
         if ($this->debugMode) {
@@ -109,7 +109,7 @@ class Ncba
         ];
 
         /// make the request
-        $result = $this->makeRequest($this->url . '/eft', $data);
+        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
 
         /// log the request and response
         if ($this->debugMode) {
@@ -152,7 +152,7 @@ class Ncba
         ];
 
         /// make the request
-        $result = $this->makeRequest($this->url . '/rtgs', $data);
+        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
 
         /// log the request and response
         if ($this->debugMode) {
@@ -192,7 +192,7 @@ class Ncba
         ];
 
         /// make the request
-        $result = $this->makeRequest($this->url . '/pesalink', $data);
+        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
 
         /// log the request and response
         if ($this->debugMode) {
@@ -234,7 +234,7 @@ class Ncba
         ];
 
         /// make the request
-        $result = $this->makeRequest($this->url . '/mpesa', $data);
+        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
 
         /// log the request and response
         if ($this->debugMode) {
