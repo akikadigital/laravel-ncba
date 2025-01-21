@@ -104,6 +104,16 @@ $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
 $response = $ncba->pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration);
 ```
 
+## Sample Responses
+
+```bash
+{
+    "Response Code":11,
+    "Reference":"DUPLICATE | FTC210920APDH",
+    "Description":"ERROR"
+}
+```
+
 ## License
 
 The Laravel NCBA package is open-sourced software licensed under the MIT license. See the LICENSE file for details.
