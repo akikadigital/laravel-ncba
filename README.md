@@ -29,7 +29,7 @@ NCBA_API_KEY= # You will reveive this key after you are fully onboarded onto NCB
 
 ## Function Responses
 
-All responses, except health checker API, return a json string. The health checker API returns a string.
+The health checker API, `$ncba->checkApiHealth();`, returns a String. All other API's return a json object.
 
 ## Usage
 
