@@ -18,7 +18,7 @@ This will import ncba.php config file in your project config directory where you
 
 ## .env file Setup
 
-Add the following configurations into the .env file
+Add the following configurations into your .env file
 
 ```bash
 NCBA_ENV= # This value is either sandbox or production. This config variable - This is required to enable Laravel NCBA pick the required variables.
@@ -29,7 +29,7 @@ NCBA_API_KEY= # You will reveive this key after you are fully onboarded onto NCB
 
 ## Function Responses
 
-The health checker API, `$ncba->checkApiHealth();`, returns a String. All other API's return a json object.
+All other API's but Check API Health, `$ncba->checkApiHealth();`, return a JSON String. However, Check API Health, retruns a String.
 
 ## Usage
 
