@@ -74,7 +74,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('ift request: ' . json_encode($data));
-            info('ift response: ' . $result->json());
+            info('ift response: ' . $result);
         }
 
         /// return the result
@@ -114,7 +114,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('eft request: ' . json_encode($data));
-            info('eft response: ' . $result->json());
+            info('eft response: ' . $result);
         }
 
         /// return the result
@@ -157,7 +157,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('rtgs request: ' . json_encode($data));
-            info('rtgs response: ' . $result->json());
+            info('rtgs response: ' . $result);
         }
 
         /// return the result
@@ -197,7 +197,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('pesalink request: ' . json_encode($data));
-            info('pesalink response: ' . $result->json());
+            info('pesalink response: ' . $result);
         }
 
         /// return the result
@@ -239,7 +239,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('mpesa request: ' . json_encode($data));
-            info('mpesa response: ' . $result->json());
+            info('mpesa response: ' . $result);
         }
 
         /// return the result
@@ -296,7 +296,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('checkTransactionStatus request: ' . json_encode($data));
-            info('checkTransactionStatus response: ' . $result->json());
+            info('checkTransactionStatus response: ' . $result);
         }
 
         /// return the result
@@ -326,7 +326,7 @@ class Ncba
         /// log the request and response
         if ($this->debugMode) {
             info('mpesaNumberValidation request: ' . json_encode($data));
-            info('mpesaNumberValidation response: ' . $result->json());
+            info('mpesaNumberValidation response: ' . $result);
         }
 
         /// return the result

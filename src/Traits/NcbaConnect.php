@@ -24,8 +24,12 @@ trait NcbaConnect
         ])->acceptJson();
 
 
-        if ($this->debugMode) info('makeRequest url: ' . $url);
-        if ($this->debugMode) info('makeRequest data: ' . json_encode($data));
+        if ($this->debugMode) {
+            info('------------------- Make Request -------------------');
+            info('makeRequest url: ' . $url);
+            info('makeRequest data: ' . json_encode($data));
+            info('------------------- End Make Request -------------------');
+        }
 
         if ($method == 'GET') {
             $response = $response->get($url, $data);
