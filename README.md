@@ -29,7 +29,7 @@ NCBA_API_KEY= # You will reveive this key after you are fully onboarded onto NCB
 
 ## Function Responses
 
-All other API's but Check API Health, `$ncba->checkApiHealth();`, return a JSON String. However, Check API Health, retruns a String.
+All other API's but [Check API Health](#check-api-health) return a JSON String. However, Check API Health, retruns a String.
 
 ## Usage
 
