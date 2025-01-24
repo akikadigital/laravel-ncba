@@ -1,6 +1,6 @@
 {
     "name": "akika/laravel-ncba",
-    "description": "A cool NCBA API package for Laravel supporting Laravel version 5 and above.",
+    "description": "The Laravel NCBA package allows you to transfer money through the NCBA Open Banking APIs. The package supports Laravel version 5 and above.",
     "homepage": "https://github.com/Akika-Digital/laravel-ncba",
     "type": "library",
     "keywords": [
