@@ -5,3 +5,7 @@
 ## 0.0.2
 
 - Adds apiKey to Http request
+
+## 0.0.3
+
+- Updates README.md File with payment responses.

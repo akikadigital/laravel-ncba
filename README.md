@@ -106,6 +106,18 @@ $response = $ncba->pesalink($beneficiaryAccountName, $reference, $account, $amou
 
 ## Sample Responses
 
+### Successful Transaction Sample Response
+
+```bash
+{
+   "Response Code":0,
+   "Reference":"FTC250124JEQT",
+   "Description":"Success"
+}
+```
+
+### Unsuccessful Transaction Sample Response
+
 ```bash
 {
     "Response Code":11,
