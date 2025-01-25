@@ -71,6 +71,29 @@ $ncba = new Ncba();
 $response = $ncba->checkTransactionStatus($referenceNumber);
 ```
 
+#### Success Response
+
+Below is a sample result for a successful transaction.
+
+```php
+{
+    "Code": "000",
+    "Description": "Success",
+    "Transaction": {
+        "Currency": "KES",
+        "Amount": "100",
+        "Date": "1/24/2025 12:37:21 PM",
+        "AccountNumber": "7810710012",
+        "Narrative": "Other",
+        "CustomerReference": "250124093719",
+        "CBSReference": "FTC250124JEQS",
+        "ThirdPartyReference": null,
+        "Status": "PASSED",
+        "ThirdPartyStatus": null
+    }
+}
+```
+
 ### MPesa Phone Number Validation
 
 ```php
@@ -78,32 +101,44 @@ $ncba = new Ncba();
 $response = $ncba->mpesaNumberValidation($phoneNumber, $reference);
 ```
 
-### Send Money to Another NCBA Customer
+### Send Money to Another NCBA Customer (Internal Transfer)
 
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
-$response = $ncba->ift($beneficiaryAccountName, $reference, $account, $amount, $narration);
+
+$response = $ncba->ift($account, $beneficiaryAccountName, $amount, $narration, $reference);
 ```
 
-### Send Money to a Non-NCBA Customer
+### Send Money to a Non-NCBA Customer (External Transfer)
 
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
-$response = $ncba->eft($beneficiaryAccountName, $reference, $account, $amount, $narration);
+
+$response = $ncba->eft($account, $beneficiaryAccountName, $amount, $narration, $reference);
 ```
 
-### Send Money via RTGS
+### Send Money via RTGS (External Transfer)
 
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
-$response = $ncba->rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration);
+
+$response = $ncba->rtgs($account, $beneficiaryAccountName, $amount, $purposeCode, $narration, $reference);
 ```
 
-### Send Money via Pesalink
+### Send Money via Pesalink (External Transfer)
 
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
-$response = $ncba->pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration);
+
+$response = $ncba->pesalink($account, $beneficiaryAccountName, $amount, $narration, $reference);
+```
+
+### Send Money To Mobile via M-Pesa
+
+```php
+$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+
+$response = $ncba->mpesa($account, $beneficiaryAccountName, $amount, $transactionId, $narration, $reference);
 ```
 
 ## Sample Responses
@@ -125,6 +160,27 @@ $response = $ncba->pesalink($beneficiaryAccountName, $reference, $account, $amou
     "Response Code":11,
     "Reference":"DUPLICATE | FTC210920APDH",
     "Description":"ERROR"
+}
+```
+
+### Transaction Status API Response
+
+```php
+{
+    "Code": "000",
+    "Description": "Success",
+    "Transaction": {
+        "Currency": "KES",
+        "Amount": "100",
+        "Date": "1/24/2025 12:37:21 PM",
+        "AccountNumber": "7810710012",
+        "Narrative": "Other",
+        "CustomerReference": "250124093719",
+        "CBSReference": "FTC250124JEQS",
+        "ThirdPartyReference": null,
+        "Status": "PASSED",
+        "ThirdPartyStatus": null
+    }
 }
 ```
 

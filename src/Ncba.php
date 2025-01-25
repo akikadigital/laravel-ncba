@@ -52,20 +52,20 @@ class Ncba
      * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
-    public function ift($beneficiaryAccountName, $reference, $account, $amount, $narration)
+    public function ift($account, $beneficiaryAccountName, $amount, $narration, $reference)
     {
         /// prepare the data
         $data = [
             "TranType" => "Internal",
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
-            "Reference" => $reference,
             "Account" => $account,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Amount" => $amount,
             "Narration" => $narration,
+            "Reference" => $reference
         ];
 
         /// make the request
@@ -91,21 +91,21 @@ class Ncba
      * 
      * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
-
-    public function eft($beneficiaryAccountName, $reference, $account, $amount, $narration)
+    // ift($account, $beneficiaryAccountName, $amount, $narration, $reference)
+    public function eft($account, $beneficiaryAccountName, $amount, $narration, $reference)
     {
         /// prepare the data
         $data = [
             "TranType" => "Eft",
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
-            "Reference" => $reference,
             "Account" => $account,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Amount" => $amount,
             "Narration" => $narration,
+            "Reference" => $reference
         ];
 
         /// make the request
@@ -127,28 +127,28 @@ class Ncba
      * @param string $account - the account number to send to
      * @param double $amount - the amount to send
      * @param string $purposeCode - the purpose code
-     * @param string $reference - the reference number
      * @param string $narration - the narration or description or reason
+     * @param string $reference - the reference number
      * 
      * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
-    public function rtgs($beneficiaryAccountName, $account, $amount, $purposeCode, $reference, $narration)
+    public function rtgs($account, $beneficiaryAccountName, $amount, $purposeCode, $narration, $reference)
     {
         /// prepare the data
         $data = [
             "TranType" => "RTGS",
-            "Account" => $account,
-            "Amount" => $amount,
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
             "BankSwiftCode" => "EQBLKENA",
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
+            "Account" => $account,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "Amount" => $amount,
             "PurposeCode" => $purposeCode,
-            "Reference" => $reference,
             "Narration" => $narration,
+            "Reference" => $reference
         ];
 
         /// make the request
@@ -175,20 +175,20 @@ class Ncba
     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
     */
 
-    public function pesalink($beneficiaryAccountName, $reference, $account, $amount, $narration)
+    public function pesalink($account, $beneficiaryAccountName, $amount, $narration, $reference)
     {
         /// prepare the data
         $data = [
             "TranType" => "Pesalink",
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
-            "Reference" => $reference,
             "Account" => $account,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Amount" => $amount,
-            "Narration" => $narration
+            "Narration" => $narration,
+            "Reference" => $reference
         ];
 
         /// make the request
@@ -216,21 +216,21 @@ class Ncba
      * @return mixed - The result of the request: \Illuminate\Http\Client\Response
      */
 
-    public function mpesa($beneficiaryAccountName, $reference, $amount, $account, $narration, $transactionId)
+    public function mpesa($account, $beneficiaryAccountName, $amount, $transactionId, $narration, $reference)
     {
         /// prepare the data
         $data = [
             "TranType" => "Mpesa",
             "BankCode" => $this->bankCode,
             "BranchCode" => $this->branchCode,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Country" => $this->country, // "Kenya",
             "Currency" => $this->currency, // "KES",
-            "Reference" => $reference, // "John Doe",
-            "Account" => $account, // "254712345678",
+            "Account" => $account, // "2547XXXXXXXX",
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
             "Amount" => ceil($amount), // 12000,
-            "Narration" => $narration, //"WATER BILL AND SANITATIONV00688",
             "Validation ID" => $transactionId, // "SFE0FNOXCI"
+            "Narration" => $narration, //"WATER BILL AND SANITATIONV00688",
+            "Reference" => $reference, // "John Doe",
         ];
 
         /// make the request
