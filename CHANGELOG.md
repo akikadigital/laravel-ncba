@@ -5,3 +5,7 @@
 ## 0.0.2
 
 - Reconfigures the structure of the APIs
+
+## 0.0.3
+
+- Adds NCBA Legacy
