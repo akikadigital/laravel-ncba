@@ -9,3 +9,7 @@
 ## 0.0.3
 
 - Adds NCBA Legacy
+
+## 0.0.4
+
+- Adds production url to NCBA config
