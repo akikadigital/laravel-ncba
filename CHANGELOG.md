@@ -13,3 +13,7 @@
 ## 0.0.4
 
 - Adds production url to NCBA config
+
+## 0.0.5
+
+- Fixes psr issue on Install Command
