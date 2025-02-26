@@ -52,6 +52,7 @@ trait NcbaConnect
         if ($this->debugMode) {
             info('------------------- Make Request -------------------');
             info('makeRequest url: ' . $url);
+            info('makeRequest headers: ' . $headers);
             info('makeRequest data: ' . json_encode($body));
             info('------------------- End Make Request -------------------');
         }
@@ -61,34 +62,7 @@ trait NcbaConnect
         } else {
             $response = $response->post($url, $body);
         }
+
+        return $response;
     }
-
-    // private function sendToEft() {
-    //     $sender = [
-    //         'accountNumber' => '1234567890',
-    //         'address1' => '1234',
-    //         'address2' => '1234',
-    //         'address3' => '1234',
-    //         'address4' => '1234',
-    //         'cif' => '1234',
-    //         'country' => 'KE',
-    //         'name' => 'John Doe'
-    //     ];
-
-    //     $beneficiary = [
-    //         'accountNumber' => '1234567890',
-    //         'address1' => '1234',
-    //         'address2' => '1234',
-    //         'address3' => '1234',
-    //         'address4' => '1234',
-    //         'bankBIC' => '1234',
-    //         'bankName' => '1234',
-    //         'bankSwiftCode' => '1234',
-    //         'city' => '1234',
-    //         'country' => 'KE',
-    //         'name' => 'John Doe',
-    //         'currency' => 'KES'
-    //     ];
-    // }
-
 }
