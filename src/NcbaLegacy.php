@@ -49,6 +49,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/Auth/generate-token', $body);
 
         if ($this->debugMode) {
+            info('------------------- Authenticate -------------------');
             info('authenticate request: ' . json_encode($body));
             info('authenticate result: ' . $result);
         }
@@ -72,6 +73,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/AccountDetails/accountdetails', $body);
 
         if ($this->debugMode) {
+            info('------------------- Get Account Details -------------------');
             info('getAccountDetails request: ' . json_encode($body));
             info('getAccountDetails result: ' . $result);
         }
@@ -95,6 +97,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/AccountMiniStatement/accountministatement', $body);
 
         if ($this->debugMode) {
+            info('------------------- Mini Statement -------------------');
             info('miniStatement request: ' . json_encode($body));
             info('miniStatement result: ' . $result);
         }
@@ -122,6 +125,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/AccountStatement/accountstatement', $body);
 
         if ($this->debugMode) {
+            info('------------------- Account Statement -------------------');
             info('accountStatement request: ' . json_encode($body));
             info('accountStatement result: ' . $result);
         }
@@ -157,6 +161,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/IFTTransaction/ifttransaction', $body);
 
         if ($this->debugMode) {
+            info('------------------- IFT -------------------');
             info('ift request: ' . json_encode($body));
             info('ift result: ' . $result);
         }
@@ -207,6 +212,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/EFTTransaction/efttransaction', $body);
 
         if ($this->debugMode) {
+            info('------------------- EFT -------------------');
             info('eft request: ' . json_encode($body));
             info('eft result: ' . $result);
         }
@@ -247,6 +253,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/RTGSPayment/RTGSPayment', $body);
 
         if ($this->debugMode) {
+            info('------------------- RTGS -------------------');
             info('rtgs request: ' . json_encode($body));
             info('rtgs result: ' . $result);
         }
@@ -293,6 +300,7 @@ class NcbaLegacy
         $result = $this->makeLegacyRequest($this->apiKey, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);
 
         if ($this->debugMode) {
+            info('------------------- PesaLink -------------------');
             info('pesalink request: ' . json_encode($body));
             info('pesalink result: ' . $result);
         }
