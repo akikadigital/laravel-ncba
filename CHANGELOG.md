@@ -25,3 +25,7 @@
 ## 0.0.7
 
 - Fixes bug on NcbaConnect trait
+
+## 0.0.8
+
+- Updates logging on debug mode
