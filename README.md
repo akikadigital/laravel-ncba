@@ -29,6 +29,15 @@ NCBA_SANDBOX_API_KEY= #The provided sandbox API Key. Contact NCBA for this key.
 NCBA_API_KEY= # You will reveive this key after you are fully onboarded onto NCBA Online Banking API.
 ```
 
+## Package Upgrade
+
+To upgrade Laravel NCBA Package to the latest version, run the following command
+
+```bash
+composer update akika/laravel-ncba
+```
+
+
 ## Function Responses
 
 [Check API Health](#check-api-health) returns a String while all the others return a JSON String.

@@ -21,3 +21,7 @@
 ## 0.0.6
 
 - Fixes bug on api call
+
+## 0.0.7
+
+- Fixes bug on NcbaConnect trait
