@@ -52,7 +52,7 @@ trait NcbaConnect
         if ($this->debugMode) {
             info('------------------- Make Request -------------------');
             info('makeRequest url: ' . $url);
-            info('makeRequest headers: ' . $headers);
+            info('makeRequest headers: ' . json_encode($headers));
             info('makeRequest data: ' . json_encode($body));
             info('------------------- End Make Request -------------------');
         }
