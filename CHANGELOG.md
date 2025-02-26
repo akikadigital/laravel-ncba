@@ -17,3 +17,7 @@
 ## 0.0.5
 
 - Fixes psr issue on Install Command
+
+## 0.0.6
+
+- Fixes bug on api call
