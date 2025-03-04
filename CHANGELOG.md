@@ -29,3 +29,7 @@
 ## 0.0.8
 
 - Updates logging on debug mode
+
+## 0.0.9
+
+- Updates authentication and API calls on Legacy API
