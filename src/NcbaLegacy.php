@@ -37,7 +37,7 @@ class NcbaLegacy
     private function getToken()
     {
         $token = $this->authenticate();
-        return $token['token'];
+        return $token['tokenID'];
     }
 
     /**
