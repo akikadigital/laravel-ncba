@@ -15,6 +15,7 @@ class NcbaLegacy
     public $apiKey;
     public $username;
     public $password;
+    public $apiToken;
 
     /**
      * NcbaLegacy constructor.
@@ -34,10 +35,9 @@ class NcbaLegacy
         $this->url = config('ncba.' . $this->environment . '.legacy_url');
     }
 
-    private function getToken()
+    public function setApiToken($apiToken)
     {
-        $token = $this->authenticate();
-        return $token['accessToken'];
+        $this->apiToken = $apiToken;
     }
 
     /**
@@ -76,10 +76,7 @@ class NcbaLegacy
             'accountNo' =>  $accountNo
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/AccountDetails/accountdetails', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/AccountDetails/accountdetails', $body);
 
         if ($this->debugMode) {
             info('------------------- Get Account Details -------------------');
@@ -103,10 +100,7 @@ class NcbaLegacy
             'accountNo' =>  $accountNo
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/AccountMiniStatement/accountministatement', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/AccountMiniStatement/accountministatement', $body);
 
         if ($this->debugMode) {
             info('------------------- Mini Statement -------------------');
@@ -134,10 +128,7 @@ class NcbaLegacy
             'toDate' => $toDate
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/AccountStatement/accountstatement', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/AccountStatement/accountstatement', $body);
 
         if ($this->debugMode) {
             info('------------------- Account Statement -------------------');
@@ -172,11 +163,8 @@ class NcbaLegacy
             'amount' => $amount,
             'narration' => $narration
         ];
-
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/IFTTransaction/ifttransaction', $body);
+        
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/IFTTransaction/ifttransaction', $body);
 
         if ($this->debugMode) {
             info('------------------- IFT -------------------');
@@ -227,10 +215,7 @@ class NcbaLegacy
             'transactionID' => $transactionID
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/EFTTransaction/efttransaction', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/EFTTransaction/efttransaction', $body);
 
         if ($this->debugMode) {
             info('------------------- EFT -------------------');
@@ -271,10 +256,7 @@ class NcbaLegacy
             'transactionID' => $transactionID
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/RTGSPayment/RTGSPayment', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/RTGSPayment/RTGSPayment', $body);
 
         if ($this->debugMode) {
             info('------------------- RTGS -------------------');
@@ -321,10 +303,7 @@ class NcbaLegacy
             'narration' => $narration,
         ];
 
-        // Get the token
-        $token = $this->getToken();
-
-        $result = $this->makeLegacyRequest($this->apiKey, $token, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);
+        $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);
 
         if ($this->debugMode) {
             info('------------------- PesaLink -------------------');
