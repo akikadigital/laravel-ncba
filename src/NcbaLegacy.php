@@ -163,7 +163,7 @@ class NcbaLegacy
             'amount' => $amount,
             'narration' => $narration
         ];
-        
+
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/IFTTransaction/ifttransaction', $body);
 
         if ($this->debugMode) {
@@ -177,42 +177,31 @@ class NcbaLegacy
 
     /**
      * Allows sending money to a bank account via EFT
-     * @param $sender - the sender details
-     * @param $beneficiary - the beneficiary details
-     * @param $currency - the currency code e.g. KES
      * @param $amount - the amount to send
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryBankBic - the beneficiary bank BIC
+     * @param $beneficiaryName - the beneficiary name
+     * @param $currency - the currency code e.g. KES
+     * @param $debitAccountNumber - the debit account number
      * @param $narration - the narration
+     * @param $senderCountry - the sender country code
      * @param $transactionID - the transaction ID
+     * @param $senderCIF - the sender CIF
      */
 
-    public function eft($sender, $beneficiary, $currency, $amount, $narration, $transactionID)
+    public function eft($amount, $beneficiaryAccountNumber, $beneficiaryBankBic, $beneficiaryName, $currency, $debitAccountNumber, $narration, $senderCountry, $transactionID, $senderCIF)
     {
         $body = [
-            'beneficiaryAccountNumber' => $beneficiary['accountNumber'],
-            'beneficiaryAddress1' => $beneficiary['address1'],
-            'beneficiaryAddress2' => $beneficiary['address2'],
-            'beneficiaryAddress3' => $beneficiary['address3'],
-            'beneficiaryAddress4' => $beneficiary['address4'],
-            'beneficiaryBankBIC' => $beneficiary['bankBIC'],
-            'beneficiaryBankName' => $beneficiary['bankName'],
-            'beneficiaryBankSwiftCode' => $beneficiary['bankSwiftCode'],
-            'beneficiaryCity' => $beneficiary['city'],
-            'beneficiaryCountry' => $beneficiary['country'],
-            'beneficiaryName' => $beneficiary['name'],
-            'creditAccountNumber' => $beneficiary['accountNumber'],
-            'debitAccountNumber' => $sender['accountNumber'],
-            'senderAccountNumber' => $sender['accountNumber'],
-            'senderAddress1' => $sender['address1'],
-            'senderAddress2' => $sender['address2'],
-            'senderAddress3' => $sender['address3'],
-            'senderAddress4' => $sender['address4'],
-            'senderCIF' => $sender['cif'],
-            'senderCountry' => $sender['country'],
-            'senderName' => $sender['name'],
-            'amount' => $amount,
-            'currency' => $currency,
-            'narration' => $narration,
-            'transactionID' => $transactionID
+            "Amount" => $amount,
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBic,
+            "BeneficiaryName" => $beneficiaryName,
+            "Currency" => $currency,
+            "DebitAccountNumber" => $debitAccountNumber,
+            "Narration" => $narration,
+            "SenderCountry" => $senderCountry,
+            "TransactionID" => $transactionID,
+            "SenderCIF" => $senderCIF
         ];
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/EFTTransaction/efttransaction', $body);
@@ -228,31 +217,38 @@ class NcbaLegacy
 
     /**
      * Allows sending money to a bank account via RTGS
-     * @param $beneficiary - the beneficiary details
-     * @param $sender - the sender details
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryBankBIC - the beneficiary bank BIC
+     * @param $beneficiaryBankName - the beneficiary bank name
+     * @param $beneficiaryCountry - the beneficiary country code
+     * @param $beneficiaryName - the beneficiary name
      * @param $creditAmount - the amount to send
      * @param $creditCurrency - the currency code e.g. KES
-     * @param $debitCurrency - the currency code e.g. KES
+     * @param $debitCurrency - the debit currency code e.g. KES
      * @param $narration - the narration
+     * @param $senderAccountNumber - the sender account number
+     * @param $senderCIF - the sender CIF
+     * @param $senderCountry - the sender country code
+     * @param $senderName - the sender name
      * @param $transactionID - the transaction ID
      */
 
-    public function rtgs($beneficiary, $sender, $creditAmount, $creditCurrency, $debitCurrency, $narration, $transactionID)
+    public function rtgs($beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $transactionID)
     {
         $body = [
-            'beneficiaryAccountNumber' => $beneficiary['accountNumber'],
-            'beneficiaryBankBIC' => $beneficiary['bankBIC'],
-            'beneficiaryBankName' => $beneficiary['bankName'],
-            'beneficiaryCountry' => $beneficiary['country'], // KE
-            'beneficiaryName' => $beneficiary['name'],
+            'beneficiaryAccountNumber' => $beneficiaryAccountNumber,
+            'beneficiaryBankBIC' => $beneficiaryBankBIC,
+            'beneficiaryBankName' => $beneficiaryBankName,
+            'beneficiaryCountry' => $beneficiaryCountry, // KE
+            'beneficiaryName' => $beneficiaryName,
             'creditAmount' => $creditAmount,
             'creditCurrency' => $creditCurrency,
             'debitCurrency' => $debitCurrency,
             'narration' => $narration,
-            'senderAccountNumber' => $sender['accountNumber'],
-            'senderCIF' => $sender['cif'],
-            'senderCountry' => $sender['country'], // KE
-            'senderName' => $sender['name'],
+            'senderAccountNumber' => $senderAccountNumber,
+            'senderCIF' => $senderCIF,
+            'senderCountry' => $senderCountry, // KE
+            'senderName' => $senderName,
             'transactionID' => $transactionID
         ];
 
@@ -269,38 +265,39 @@ class NcbaLegacy
 
     /**
      * Allows sending money to a bank account via PesaLink
-     * @param $beneficiary - the beneficiary details
-     * @param $sender - the sender details
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryAddress1 - the beneficiary address
+     * @param $beneficiaryBankBIC - the beneficiary bank BIC
+     * @param $beneficiaryBankName - the beneficiary bank name
+     * @param $beneficiaryName - the beneficiary name
      * @param $amount - the amount to send
      * @param $currency - the currency code e.g. KES
      * @param $narration - the narration
+     * @param $senderAccountNumber - the sender account number
+     * @param $senderAddress1 - the sender address
+     * @param $senderCIF - the sender CIF
+     * @param $senderCountry - the sender country code
+     * @param $senderName - the sender name
      * @param $transactionID - the transaction ID
      */
 
-    public function pesalink($beneficiary, $sender, $amount, $currency, $narration, $transactionID)
+    public function pesalink($beneficiaryAccountNumber, $beneficiaryAddress1, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryName, $amount, $currency, $narration, $senderAccountNumber, $senderAddress1, $senderCIF, $senderCountry, $senderName, $transactionID)
     {
         $body = [
-            'beneficiaryAccountNumber' => $beneficiary['accountNumber'],
-            'beneficiaryAddress1' => $beneficiary['address1'],
-            'beneficiaryAddress2' => $beneficiary['address2'],
-            'beneficiaryAddress3' => $beneficiary['address3'],
-            'beneficiaryAddress4' => $beneficiary['address4'],
-            'beneficiaryBankBIC' => $beneficiary['bankBIC'],
-            'beneficiaryBankName' => $beneficiary['bankName'],
-            'beneficiaryCountry' => $beneficiary['country'],
-            'beneficiaryName' => $beneficiary['name'],
-            'senderAccountNumber' => $sender['accountNumber'],
-            'senderAddress1' => $sender['address1'],
-            'senderAddress2' => $sender['address2'],
-            'senderAddress3' => $sender['address3'],
-            'senderAddress4' => $sender['address4'],
-            'senderCIF' => $sender['cif'],
-            'senderCountry' => $sender['country'],
-            'senderName' => $sender['name'],
-            'transactionID' => $transactionID,
+            'beneficiaryAccountNumber' => $beneficiaryAccountNumber,
+            'beneficiaryAddress1' => $beneficiaryAddress1,
+            'beneficiaryBankBIC' => $beneficiaryBankBIC,
+            'beneficiaryBankName' => $beneficiaryBankName,
+            'beneficiaryName' => $beneficiaryName,
             'amount' => $amount,
             'currency' => $currency,
             'narration' => $narration,
+            'senderAccountNumber' => $senderAccountNumber,
+            'senderAddress1' => $senderAddress1,
+            'senderCIF' => $senderCIF,
+            'senderCountry' => $senderCountry,
+            'senderName' => $senderName,
+            'transactionID' => $transactionID,
         ];
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);

@@ -47,31 +47,28 @@ composer update akika/laravel-ncba
 ### Initialize NCBA
 
 ```php
-use Akika\LaravelNcba\Ncba;
+use Akika\LaravelNcba\NcbaLegacy;
 
-$ncba = new Ncba();
-$ncba = new Ncba($bankCode, $branchCode, $country, $currency);
+$ncba = new NcbaLegacy($apiKey, $username, $password);
 ```
 
-NCBA class can be initialized in either of the 2 ways shown above. However, to perform a transaction, use the second initialization formula.
+- The above variables will be provided by NCBA during onboarding.
+
+
+### Authentication
+
+An AP token is required to authenticate and use NCBA API's. Below is how to authenticate.
 
 ```php
-$bankCode # Bank specific code
-$branchCode # Branch specific code
-$country # Country name in full e.g. Kenya
-$currency # Currency code e.g. KES
+$ncba->authenticate();
 ```
 
-### Check API Health
+
+### Settings API Token
 
 ```php
-$ncba = new Ncba();
-$ncba->checkApiHealth();
+$ncba->setApiToken($apiToken);
 ```
-
-#### Response
-
-Returns a String response, either `Healthy` or `Not Healthy`.
 
 ### Check Transaction Status
 
@@ -115,7 +112,7 @@ $response = $ncba->mpesaNumberValidation($phoneNumber, $reference);
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
 
-$response = $ncba->ift($account, $beneficiaryAccountName, $amount, $narration, $reference);
+$response = $ncba->ift($country, $transactionID, $beneficiaryAccountName, $debitAccountNumber, $creditAccountNumber, $currency, $amount, $narration);
 ```
 
 ### Send Money to a Non-NCBA Customer (External Transfer)
@@ -123,7 +120,7 @@ $response = $ncba->ift($account, $beneficiaryAccountName, $amount, $narration, $
 ```php
 $ncba = new Ncba($bankCode, $branchCode, $country, $currency);
 
-$response = $ncba->eft($account, $beneficiaryAccountName, $amount, $narration, $reference);
+$response = $ncba->eft($amount, $beneficiaryAccountNumber, $beneficiaryBankBic, $beneficiaryName, $currency, $debitAccountNumber, $narration, $senderCountry, $transactionID, $senderCIF);
 ```
 
 ### Send Money via RTGS (External Transfer)
