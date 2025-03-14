@@ -45,3 +45,7 @@
 ## 0.1.2
 
 - Updates app versioning
+
+## 0.1.3
+
+- Updates from debit/credit accounts to sender and beneficiary
