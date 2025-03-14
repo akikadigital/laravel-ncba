@@ -36,4 +36,4 @@
 
 ## 0.0.10
 
-- updates the API to send out pesalink, rtgs and ift
+- Updates the API to send out pesalink, rtgs and ift
