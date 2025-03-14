@@ -34,6 +34,10 @@
 
 - Updates authentication and API calls on Legacy API
 
-## 0.0.10
+## 0.1.0
+
+- Updates authentication
+
+## 0.1.1
 
 - Updates the API to send out pesalink, rtgs and ift
