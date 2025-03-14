@@ -41,3 +41,7 @@
 ## 0.1.1
 
 - Updates the API to send out pesalink, rtgs and ift
+
+## 0.1.2
+
+- Updates app versioning
