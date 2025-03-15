@@ -143,22 +143,22 @@ class NcbaLegacy
      * Allows sending money to a bank account via IFT
      * @param $country - the country code
      * @param $transactionID - the transaction ID
+     * @param $beneficiaryAccountNumber - the credit account number
      * @param $beneficiaryAccountName - the beneficiary account name
      * @param $senderAccountNumber - the debit account number
-     * @param $beneficiaryAccountNumber - the credit account number
      * @param $currency - the currency code e.g. KES
      * @param $amount - the amount to send
      * @param $narration - the narration
      */
 
-    public function ift($country, $transactionID, $beneficiaryAccountName, $senderAccountNumber, $beneficiaryAccountNumber, $currency, $amount, $narration)
+    public function ift($country, $transactionID, $beneficiaryAccountNumber, $beneficiaryAccountName, $senderAccountNumber, $currency, $amount, $narration)
     {
         $body = [
             'country' => $country,
             'transactionID' => $transactionID,
+            'creditAccountNumber' => $beneficiaryAccountNumber,
             'beneficiaryAccountName' => $beneficiaryAccountName,
             'debitAccountNumber' => $senderAccountNumber,
-            'creditAccountNumber' => $beneficiaryAccountNumber,
             'currency' => $currency,
             'amount' => $amount,
             'narration' => $narration
