@@ -49,3 +49,7 @@
 ## 0.1.3
 
 - Updates from debit/credit accounts to sender and beneficiary
+
+## 0.1.4
+
+- Updates config files
