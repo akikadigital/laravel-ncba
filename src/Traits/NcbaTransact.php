@@ -4,7 +4,7 @@ namespace Akika\LaravelNcba\Traits;
 
 use Illuminate\Support\Facades\Http;
 
-trait NcbaConnect
+trait NcbaTransact
 {
 
     /**

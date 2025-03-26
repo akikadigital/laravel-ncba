@@ -2,11 +2,11 @@
 
 namespace Akika\LaravelNcba;
 
-use Akika\LaravelNcba\Traits\NcbaConnect;
+use Akika\LaravelNcba\Traits\NcbaTransact;
 
 class Ncba
 {
-    use NcbaConnect;
+    use NcbaTransact;
 
     public $environment;
     public $debugMode;
@@ -108,6 +108,41 @@ class Ncba
     }
 
     /**
+     * Get account summary for a given period
+     * @param $apiToken - the API token
+     * @param $countryCode - the country code
+     * @param $accountNo - the account number
+     * @param $fromDate - the start date
+     * @param $toDate - the end date
+     */
+
+    public function accountSummary($apiToken, $countryCode, $accountNo, $fromDate, $toDate)
+    {
+        /*
+        "Country":"String", (Kenya/Uganda/Tanzania/Rwanda)
+        "AccountNo":" String", (NCBA linked account number)
+        "FromDate":"26052022",
+        "ToDate":"05062022"
+        */
+        $body = [
+            'Country' => $countryCode,
+            'AccountNo' =>  $accountNo,
+            'FromDate' => date('dmy', strtotime($fromDate)), // 26052022
+            'ToDate' => date('dmy', strtotime($toDate)) // '05062022'
+        ];
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountStatement/accountstatement', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Account Summary -------------------');
+            info('Account Summary request: ' . json_encode($body));
+            info('Account Summary result: ' . $result);
+        }
+
+        return $result;
+    }
+
+    /**
      * Get account statement for a given period
      * @param $apiToken - the API token
      * @param $countryCode - the country code
@@ -129,8 +164,41 @@ class Ncba
 
         if ($this->debugMode) {
             info('------------------- Account Statement -------------------');
-            info('accountStatement request: ' . json_encode($body));
-            info('accountStatement result: ' . $result);
+            info('Account Statement request: ' . json_encode($body));
+            info('Account Statement result: ' . $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get account statement for a given period
+     * @param $apiToken - the API token
+     * @param $countryCode - the country code (KE/UG/TZ/RW)
+     * @param $transactionID - the account number
+     */
+
+    public function checkTransactionStatus($apiToken, $countryCode, $transactionID)
+    {
+        $body = [
+            'country' => $countryCode,
+            'transactionId' => $transactionID
+        ];
+
+        // the variables must be set
+        if (empty($apiToken) || empty($countryCode) || empty($transactionID)) {
+            return [
+                'status' => 'error',
+                'message' => 'All variables must be set'
+            ];
+        }
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/ITransactionStatusQuery/transactionstatusquery', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Check Transaction Status -------------------');
+            info('Check Transaction Status request: ' . json_encode($body));
+            info('Check Transaction Status result: ' . $result);
         }
 
         return $result;
