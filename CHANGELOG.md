@@ -53,3 +53,7 @@
 ## 0.1.4
 
 - Updates config files
+
+## 0.1.5
+
+- Updates endpoints
