@@ -236,22 +236,6 @@ class Ncba
             "SenderCIF" => $senderCIF
         ];
 
-        // $beneficiaryBankBic must be numeric and not more than 5 characters
-        if (!is_numeric($beneficiaryBankBic) || strlen($beneficiaryBankBic) > 5) {
-            return [
-                'status' => 'error',
-                'message' => 'Beneficiary Bank BIC must be numeric and not more than 5 characters'
-            ];
-        }
-
-        // $senderCIF must be numeric and not more than 6 characters
-        if (!is_numeric($senderCIF) || strlen($senderCIF) > 6) {
-            return [
-                'status' => 'error',
-                'message' => 'Sender CIF must be numeric and not more than 6 characters'
-            ];
-        }
-
         $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/EFTTransaction/efttransaction', $body);
 
         if ($this->debugMode) {
@@ -296,7 +280,7 @@ class Ncba
             "CreditCurrency" => $creditCurrency,
             "Narration" => $narration,
             "SenderAccountNumber" => $senderAccountNumber,
-            "SenderCIF" => $senderCIF,
+            "SenderCIF" => $senderCIF, // 
             "SenderCountry" => $senderCountry,
             "SenderName" => $senderName,
             "PurposeCode" => $purposeCode,

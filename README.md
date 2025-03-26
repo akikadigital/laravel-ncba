@@ -73,7 +73,7 @@ Gets a mini statement for the account
 $ncba->miniStatement($apiToken, $countryCode, $accountNo);
 ```
 
-## Account Statment
+## Account Statement
 
 Gets an account statement based on the the specified period of time. The date format is 'ddmmyyyy'
 
