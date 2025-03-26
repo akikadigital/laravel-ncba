@@ -8,328 +8,335 @@ class Ncba
 {
     use NcbaConnect;
 
-    protected $environment;
-    protected $debugMode;
-    protected $url;
+    public $environment;
+    public $debugMode;
+    public $url;
 
-    protected $apiKey;
-
-    protected $bankCode;
-    protected $branchCode;
-    protected $country;
-    protected $currency;
+    public $apiKey;
+    public $username;
+    public $password;
 
     /**
-     * Ncba constructor.
-     * @param null $bankCode
-     * @param null $branchCode
-     * @param null $country
-     * @param null $currency
-     * 
+     * constructor.
+     * @param $apiKey
+     * @param $username
+     * @param $password
      */
 
-    public function __construct($bankCode = null, $branchCode = null, $country = null, $currency = null)
+    public function __construct($apiKey, $username, $password)
     {
+        $this->apiKey = $apiKey;
+        $this->username = $username;
+        $this->password = $password;
+
         $this->environment = config('ncba.env');
         $this->debugMode = config('ncba.debug');
-        $this->apiKey = config('ncba.' . $this->environment . '.api_key');
-        $this->url = config('ncba.' . $this->environment . '.url');
+        $this->url = config('ncba.' . $this->environment . '.legacy_url');
+    }
 
-        $this->bankCode = $bankCode;
-        $this->branchCode = $branchCode;
-        $this->country = $country;
-        $this->currency = $currency;
+    /**
+     * Authenticate account
+     * @return mixed
+     */
+
+    public function authenticate()
+    {
+        $body = [
+            'userID' => $this->username,
+            'password' => $this->password
+        ];
+
+        $result = $this->makeAuthRequest($this->apiKey, $this->url . '/Auth/generate-token', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Authenticate -------------------');
+            info('authenticate request: ' . json_encode($body));
+            info('authenticate result: ' . $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get account balance
+     * @param $apiToken - the API token
+     * @param $countryCode - the country code
+     * @param $accountNo - the account number
+     */
+
+    public function accountDetails($apiToken, $countryCode, $accountNo)
+    {
+        $body = [
+            'country' => $countryCode,
+            'accountNo' =>  $accountNo
+        ];
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountDetails/accountdetails', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Get Account Details -------------------');
+            info('getAccountDetails request: ' . json_encode($body));
+            info('getAccountDetails result: ' . $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get account balance
+     * @param $apiToken - the API token
+     * @param $countryCode - the country code
+     * @param $accountNo - the account number
+     */
+
+    public function miniStatement($apiToken, $countryCode, $accountNo)
+    {
+        $body = [
+            'Country' => $countryCode,
+            'AccountNo' =>  $accountNo
+        ];
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountMiniStatement/accountministatement', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Mini Statement -------------------');
+            info('miniStatement request: ' . json_encode($body));
+            info('miniStatement result: ' . $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get account statement for a given period
+     * @param $apiToken - the API token
+     * @param $countryCode - the country code
+     * @param $accountNo - the account number
+     * @param $fromDate - the start date
+     * @param $toDate - the end date
+     */
+
+    public function accountStatement($apiToken, $countryCode, $accountNo, $fromDate, $toDate)
+    {
+        $body = [
+            'Country' => $countryCode,
+            'AccountNo' =>  $accountNo,
+            'FromDate' => $fromDate,
+            'ToDate' => $toDate
+        ];
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountStatement/accountstatement', $body);
+
+        if ($this->debugMode) {
+            info('------------------- Account Statement -------------------');
+            info('accountStatement request: ' . json_encode($body));
+            info('accountStatement result: ' . $result);
+        }
+
+        return $result;
     }
 
     /**
      * Allows sending money to a bank account via IFT
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $reference - the reference number
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $narration - the narration or description or reason
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     * @param $apiToken - the API token
+     * @param $country - (Kenya/Uganda/Tanzania/Rwanda)
+     * @param $transactionID - the transaction ID
+     * @param $beneficiaryAccountNumber - the credit account number
+     * @param $beneficiaryAccountName - the beneficiary account name
+     * @param $senderAccountNumber - the debit account number
+     * @param $currency - the currency code e.g. (KES/UGX/TZS/USD,GBP/EUR)
+     * @param $amount - the amount to send
+     * @param $narration - the narration
      */
 
-    public function ift($account, $beneficiaryAccountName, $amount, $narration, $reference)
+    public function ift($apiToken, $country, $transactionID, $beneficiaryAccountNumber, $beneficiaryAccountName, $senderAccountNumber, $currency, $amount, $narration)
     {
-        /// prepare the data
-        $data = [
-            "TranType" => "Internal",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Account" => $account,
+        $body = [
+            "Country" => $country,
+            "TransactionID" => $transactionID,
             "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "DebitAccountNumber" => $senderAccountNumber,
+            "CreditAccountNumber" => $beneficiaryAccountNumber,
+            "Currency" => $currency,
             "Amount" => $amount,
-            "Narration" => $narration,
-            "Reference" => $reference
+            "Narration" => $narration
         ];
 
-        /// make the request
-        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/IFTTransaction/ifttransaction', $body);
 
-        /// log the request and response
         if ($this->debugMode) {
-            info('ift request: ' . json_encode($data));
-            info('ift response: ' . $result);
+            info('------------------- IFT -------------------');
+            info('ift request: ' . json_encode($body));
+            info('ift result: ' . $result);
         }
 
-        /// return the result
         return $result;
     }
 
     /**
      * Allows sending money to a bank account via EFT
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $reference - the reference number
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $narration - the narration or description or reason
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     * @param $apiToken - the API token
+     * @param $amount - the amount to send
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryBankBic - the beneficiary bank BIC
+     * @param $beneficiaryName - the beneficiary name
+     * @param $currency - the currency code e.g. KES
+     * @param $senderAccountNumber - the debit account number
+     * @param $narration - the narration
+     * @param $senderCountry - the sender country code
+     * @param $transactionID - the transaction ID
+     * @param $senderCIF - the sender CIF
      */
-    // ift($account, $beneficiaryAccountName, $amount, $narration, $reference)
-    public function eft($account, $beneficiaryAccountName, $amount, $narration, $reference)
+
+    public function eft($apiToken, $amount, $beneficiaryAccountNumber, $beneficiaryBankBic, $beneficiaryName, $currency, $senderAccountNumber, $narration, $senderCountry, $transactionID, $senderCIF)
     {
-        /// prepare the data
-        $data = [
-            "TranType" => "Eft",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Account" => $account,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
+        $body = [
             "Amount" => $amount,
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBic, // "01096"
+            "BeneficiaryName" => $beneficiaryName,
+            "Currency" => $currency,
+            "DebitAccountNumber" => $senderAccountNumber,
             "Narration" => $narration,
-            "Reference" => $reference
+            "SenderCountry" => $senderCountry,
+            "TransactionID" => $transactionID,
+            "SenderCIF" => $senderCIF
         ];
 
-        /// make the request
-        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('eft request: ' . json_encode($data));
-            info('eft response: ' . $result);
+        // $beneficiaryBankBic must be numeric and not more than 5 characters
+        if (!is_numeric($beneficiaryBankBic) || strlen($beneficiaryBankBic) > 5) {
+            return [
+                'status' => 'error',
+                'message' => 'Beneficiary Bank BIC must be numeric and not more than 5 characters'
+            ];
         }
 
-        /// return the result
+        // $senderCIF must be numeric and not more than 6 characters
+        if (!is_numeric($senderCIF) || strlen($senderCIF) > 6) {
+            return [
+                'status' => 'error',
+                'message' => 'Sender CIF must be numeric and not more than 6 characters'
+            ];
+        }
+
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/EFTTransaction/efttransaction', $body);
+
+        if ($this->debugMode) {
+            info('------------------- EFT -------------------');
+            info('eft request: ' . json_encode($body));
+            info('eft result: ' . $result);
+        }
+
         return $result;
     }
 
     /**
      * Allows sending money to a bank account via RTGS
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $purposeCode - the purpose code
-     * @param string $narration - the narration or description or reason
-     * @param string $reference - the reference number
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
+     * @param $apiToken - the API token
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryBankBIC - the beneficiary bank BIC
+     * @param $beneficiaryBankName - the beneficiary bank name
+     * @param $beneficiaryCountry - the beneficiary country code - (Country- KE/UG/TZ/RW)
+     * @param $beneficiaryName - the beneficiary name
+     * @param $creditAmount - the amount to send - (Amount in whole numbers, no odd cents)
+     * @param $creditCurrency - the currency code e.g. KES
+     * @param $debitCurrency - the currency code e.g. KES
+     * @param $narration - the narration
+     * @param $senderAccountNumber - the sender account number
+     * @param $senderCIF - the sender CIF - (Customer number – first 6 digits of the sender account number or any other assigned customer number as guided by NCBA)
+     * @param $senderCountry - the sender country code - (Country- KE/UG/TZ/RW)
+     * @param $senderName - the sender name
+     * @param $purposeCode - the purpose of payment code - (Purpose of Payment Code – List to be provided by Bank)
+     * @param $transactionID - the transaction ID - (Alphanumeric Unique Reference)
      */
 
-    public function rtgs($account, $beneficiaryAccountName, $amount, $purposeCode, $narration, $reference)
+    public function rtgs($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $purposeCode, $transactionID)
     {
-        /// prepare the data
-        $data = [
-            "TranType" => "RTGS",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "BankSwiftCode" => "EQBLKENA",
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Account" => $account,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
-            "Amount" => $amount,
+        $body = [
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBIC,
+            "BeneficiaryBankName" => $beneficiaryBankName,
+            "BeneficiaryCountry" => $beneficiaryCountry,
+            "BeneficiaryName" => $beneficiaryName,
+            "CreditAmount" => $creditAmount,
+            "DebitCurrency" => $debitCurrency,
+            "CreditCurrency" => $creditCurrency,
+            "Narration" => $narration,
+            "SenderAccountNumber" => $senderAccountNumber,
+            "SenderCIF" => $senderCIF,
+            "SenderCountry" => $senderCountry,
+            "SenderName" => $senderName,
             "PurposeCode" => $purposeCode,
-            "Narration" => $narration,
-            "Reference" => $reference
+            "TransactionID" => $transactionID
         ];
 
-        /// make the request
-        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('rtgs request: ' . json_encode($data));
-            info('rtgs response: ' . $result);
+        // amount must be > 50
+        if ($creditAmount < 50) {
+            return [
+                'status' => 'error',
+                'message' => 'Amount must be greater than 50'
+            ];
         }
 
-        /// return the result
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/RTGSPayment/RTGSPayment', $body);
+
+        if ($this->debugMode) {
+            info('------------------- RTGS -------------------');
+            info('rtgs request: ' . json_encode($body));
+            info('rtgs result: ' . $result);
+        }
+
         return $result;
     }
 
-    /*
-    * Allows sending money to a bank account via Pesalink
-    * @param string $beneficiaryAccountName - the name of the account holder
-    * @param string $reference - the reference number
-    * @param string $account - the account number to send to
-    * @param double $amount - the amount to send
-    * @param string $narration - the narration or description or reason
-    * 
-    * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-    */
+    /**
+     * Allows sending money to a bank account via PesaLink
+     * @param $apiToken - the API token
+     * @param $beneficiaryAccountNumber - the beneficiary account number
+     * @param $beneficiaryBankBIC - the beneficiary bank BIC
+     * @param $beneficiaryName - the beneficiary name
+     * @param $amount - the amount to send
+     * @param $currency - the currency code e.g. KES
+     * @param $narration - the narration
+     * @param $senderAccountNumber - the sender account number
+     * @param $senderCIF - the sender CIF
+     * @param $senderCountry - the sender country code
+     * @param $transactionID - the transaction ID
+     */
 
-    public function pesalink($account, $beneficiaryAccountName, $amount, $narration, $reference)
+    public function pesalink($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryName, $amount, $currency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $transactionID)
     {
-        /// prepare the data
-        $data = [
-            "TranType" => "Pesalink",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Account" => $account,
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
+        $body = [
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBIC,
+            "BeneficiaryName" => $beneficiaryName,
             "Amount" => $amount,
+            "Currency" => $currency,
             "Narration" => $narration,
-            "Reference" => $reference
+            "SenderAccountNumber" => $senderAccountNumber,
+            "SenderCIF" => $senderCIF,
+            "SenderCountry" => $senderCountry,
+            "TransactionID" => $transactionID
         ];
 
-        /// make the request
-        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('pesalink request: ' . json_encode($data));
-            info('pesalink response: ' . $result);
+        // amount must be > 50
+        if ($amount < 100) {
+            return [
+                'status' => 'error',
+                'message' => 'Amount must be greater than 50'
+            ];
         }
 
-        /// return the result
+        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);
+
+        if ($this->debugMode) {
+            info('------------------- PesaLink -------------------');
+            info('pesalink request: ' . json_encode($body));
+            info('pesalink result: ' . $result);
+        }
+
         return $result;
     }
 
-    /**
-     * Allows sending money to a bank account via MPESA
-     * @param string $beneficiaryAccountName - the name of the account holder
-     * @param string $reference - the reference number
-     * @param string $account - the account number to send to
-     * @param double $amount - the amount to send
-     * @param string $narration - the narration or description or reason
-     * @param string $transactionId - the transaction ID
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function mpesa($account, $beneficiaryAccountName, $amount, $transactionId, $narration, $reference)
-    {
-        /// prepare the data
-        $data = [
-            "TranType" => "Mpesa",
-            "BankCode" => $this->bankCode,
-            "BranchCode" => $this->branchCode,
-            "Country" => $this->country, // "Kenya",
-            "Currency" => $this->currency, // "KES",
-            "Account" => $account, // "2547XXXXXXXX",
-            "BeneficiaryAccountName" => $beneficiaryAccountName,
-            "Amount" => ceil($amount), // 12000,
-            "Validation ID" => $transactionId, // "SFE0FNOXCI"
-            "Narration" => $narration, //"WATER BILL AND SANITATIONV00688",
-            "Reference" => $reference, // "John Doe",
-        ];
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/CreditTransfer', $data);
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('mpesa request: ' . json_encode($data));
-            info('mpesa response: ' . $result);
-        }
-
-        /// return the result
-        return $result;
-    }
-
-    /**
-     * Checks the health of the API
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function checkApiHealth()
-    {
-        /// prepare the data
-        $data = [
-            "apiKey" => $this->apiKey
-        ];
-
-        info($this->url . '/health');
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/health', $data, 'GET');
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('checkApiHealth request: ' . json_encode($data));
-            info('checkApiHealth response: ' . $result);
-        }
-
-        /// return the result
-        return $result; // Healthy
-    }
-
-    /**
-     * Checks the status of a transaction
-     * @param string $referenceNumber - the reference number
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function checkTransactionStatus($referenceNumber)
-    {
-
-        /// prepare the data
-        $data = [
-            "country" => $this->country,
-            "referenceNumber" => $referenceNumber
-        ];
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/TransactionQuery', $data, 'GET');
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('checkTransactionStatus request: ' . json_encode($data));
-            info('checkTransactionStatus response: ' . $result);
-        }
-
-        /// return the result
-        return $result;
-    }
-
-    /**
-     * Validates phone numbr through Mpesa
-     * @param string $phoneNumber - the phone number
-     * @param string $reference - the reference number
-     * 
-     * @return mixed - The result of the request: \Illuminate\Http\Client\Response
-     */
-
-    public function mpesaNumberValidation($phoneNumber, $reference)
-    {
-
-        /// prepare the data
-        $data = [
-            "Mobile Number" => $phoneNumber,
-            "Reference" => $reference
-        ];
-
-        /// make the request
-        $result = $this->makeRequest($this->url . '/MpesaPhoneNumberValidation', $data, 'GET');
-
-        /// log the request and response
-        if ($this->debugMode) {
-            info('mpesaNumberValidation request: ' . json_encode($data));
-            info('mpesaNumberValidation response: ' . $result);
-        }
-
-        /// return the result
-        return $result;
-    }
+    public function mpesa() {}
 }
