@@ -112,8 +112,8 @@ class Ncba
      * @param $apiToken - the API token
      * @param $countryCode - the country code
      * @param $accountNo - the account number
-     * @param $fromDate - the start date
-     * @param $toDate - the end date
+     * @param $fromDate - the start date - 26052022
+     * @param $toDate - the end date - '05062022'
      */
 
     public function accountSummary($apiToken, $countryCode, $accountNo, $fromDate, $toDate)
@@ -127,8 +127,8 @@ class Ncba
         $body = [
             'Country' => $countryCode,
             'AccountNo' =>  $accountNo,
-            'FromDate' => date('dmy', strtotime($fromDate)), // 26052022
-            'ToDate' => date('dmy', strtotime($toDate)) // '05062022'
+            'FromDate' => $fromDate,
+            'ToDate' => $toDate
         ];
 
         $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountStatement/accountstatement', $body);
