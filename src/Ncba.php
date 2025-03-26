@@ -31,7 +31,7 @@ class Ncba
 
         $this->environment = config('ncba.env');
         $this->debugMode = config('ncba.debug');
-        $this->url = config('ncba.' . $this->environment . '.legacy_url');
+        $this->url = config('ncba.' . $this->environment . '.url');
     }
 
     /**
