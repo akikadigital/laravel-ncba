@@ -96,8 +96,8 @@ class NcbaLegacy
     public function miniStatement($countryCode, $accountNo)
     {
         $body = [
-            'country' => $countryCode,
-            'accountNo' =>  $accountNo
+            'Country' => $countryCode,
+            'AccountNo' =>  $accountNo
         ];
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/AccountMiniStatement/accountministatement', $body);
@@ -122,10 +122,10 @@ class NcbaLegacy
     public function accountStatement($countryCode, $accountNo, $fromDate, $toDate)
     {
         $body = [
-            'country' => $countryCode,
-            'accountNo' =>  $accountNo,
-            'fromDate' => $fromDate,
-            'toDate' => $toDate
+            'Country' => $countryCode,
+            'AccountNo' =>  $accountNo,
+            'FromDate' => $fromDate,
+            'ToDate' => $toDate
         ];
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/AccountStatement/accountstatement', $body);
@@ -141,12 +141,12 @@ class NcbaLegacy
 
     /**
      * Allows sending money to a bank account via IFT
-     * @param $country - the country code
+     * @param $country - (Kenya/Uganda/Tanzania/Rwanda)
      * @param $transactionID - the transaction ID
      * @param $beneficiaryAccountNumber - the credit account number
      * @param $beneficiaryAccountName - the beneficiary account name
      * @param $senderAccountNumber - the debit account number
-     * @param $currency - the currency code e.g. KES
+     * @param $currency - the currency code e.g. (KES/UGX/TZS/USD,GBP/EUR)
      * @param $amount - the amount to send
      * @param $narration - the narration
      */
@@ -154,14 +154,14 @@ class NcbaLegacy
     public function ift($country, $transactionID, $beneficiaryAccountNumber, $beneficiaryAccountName, $senderAccountNumber, $currency, $amount, $narration)
     {
         $body = [
-            'country' => $country,
-            'transactionID' => $transactionID,
-            'creditAccountNumber' => $beneficiaryAccountNumber,
-            'beneficiaryAccountName' => $beneficiaryAccountName,
-            'debitAccountNumber' => $senderAccountNumber,
-            'currency' => $currency,
-            'amount' => $amount,
-            'narration' => $narration
+            "Country" => $country,
+            "TransactionID" => $transactionID,
+            "BeneficiaryAccountName" => $beneficiaryAccountName,
+            "DebitAccountNumber" => $senderAccountNumber,
+            "CreditAccountNumber" => $beneficiaryAccountNumber,
+            "Currency" => $currency,
+            "Amount" => $amount,
+            "Narration" => $narration
         ];
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/IFTTransaction/ifttransaction', $body);
@@ -194,7 +194,7 @@ class NcbaLegacy
         $body = [
             "Amount" => $amount,
             "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
-            "BeneficiaryBankBIC" => $beneficiaryBankBic,
+            "BeneficiaryBankBIC" => $beneficiaryBankBic, // "01096"
             "BeneficiaryName" => $beneficiaryName,
             "Currency" => $currency,
             "DebitAccountNumber" => $senderAccountNumber,
@@ -203,6 +203,22 @@ class NcbaLegacy
             "TransactionID" => $transactionID,
             "SenderCIF" => $senderCIF
         ];
+
+        // $beneficiaryBankBic must be numeric and not more than 5 characters
+        if (!is_numeric($beneficiaryBankBic) || strlen($beneficiaryBankBic) > 5) {
+            return [
+                'status' => 'error',
+                'message' => 'Beneficiary Bank BIC must be numeric and not more than 5 characters'
+            ];
+        }
+
+        // $senderCIF must be numeric and not more than 6 characters
+        if (!is_numeric($senderCIF) || strlen($senderCIF) > 6) {
+            return [
+                'status' => 'error',
+                'message' => 'Sender CIF must be numeric and not more than 6 characters'
+            ];
+        }
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/EFTTransaction/efttransaction', $body);
 
@@ -220,37 +236,47 @@ class NcbaLegacy
      * @param $beneficiaryAccountNumber - the beneficiary account number
      * @param $beneficiaryBankBIC - the beneficiary bank BIC
      * @param $beneficiaryBankName - the beneficiary bank name
-     * @param $beneficiaryCountry - the beneficiary country code
+     * @param $beneficiaryCountry - the beneficiary country code - (Country- KE/UG/TZ/RW)
      * @param $beneficiaryName - the beneficiary name
-     * @param $creditAmount - the amount to send
+     * @param $creditAmount - the amount to send - (Amount in whole numbers, no odd cents)
      * @param $creditCurrency - the currency code e.g. KES
-     * @param $debitCurrency - the debit currency code e.g. KES
+     * @param $debitCurrency - the currency code e.g. KES
      * @param $narration - the narration
      * @param $senderAccountNumber - the sender account number
-     * @param $senderCIF - the sender CIF
-     * @param $senderCountry - the sender country code
+     * @param $senderCIF - the sender CIF - (Customer number – first 6 digits of the sender account number or any other assigned customer number as guided by NCBA)
+     * @param $senderCountry - the sender country code - (Country- KE/UG/TZ/RW)
      * @param $senderName - the sender name
-     * @param $transactionID - the transaction ID
+     * @param $purposeCode - the purpose of payment code - (Purpose of Payment Code – List to be provided by Bank)
+     * @param $transactionID - the transaction ID - (Alphanumeric Unique Reference)
      */
 
-    public function rtgs($beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $transactionID)
+    public function rtgs($beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $purposeCode, $transactionID)
     {
         $body = [
-            'beneficiaryAccountNumber' => $beneficiaryAccountNumber,
-            'beneficiaryBankBIC' => $beneficiaryBankBIC,
-            'beneficiaryBankName' => $beneficiaryBankName,
-            'beneficiaryCountry' => $beneficiaryCountry, // KE
-            'beneficiaryName' => $beneficiaryName,
-            'creditAmount' => $creditAmount,
-            'creditCurrency' => $creditCurrency,
-            'debitCurrency' => $debitCurrency,
-            'narration' => $narration,
-            'senderAccountNumber' => $senderAccountNumber,
-            'senderCIF' => $senderCIF,
-            'senderCountry' => $senderCountry, // KE
-            'senderName' => $senderName,
-            'transactionID' => $transactionID
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBIC,
+            "BeneficiaryBankName" => $beneficiaryBankName,
+            "BeneficiaryCountry" => $beneficiaryCountry,
+            "BeneficiaryName" => $beneficiaryName,
+            "CreditAmount" => $creditAmount,
+            "DebitCurrency" => $debitCurrency,
+            "CreditCurrency" => $creditCurrency,
+            "Narration" => $narration,
+            "SenderAccountNumber" => $senderAccountNumber,
+            "SenderCIF" => $senderCIF,
+            "SenderCountry" => $senderCountry,
+            "SenderName" => $senderName,
+            "PurposeCode" => $purposeCode,
+            "TransactionID" => $transactionID
         ];
+
+        // amount must be > 50
+        if ($creditAmount < 50) {
+            return [
+                'status' => 'error',
+                'message' => 'Amount must be greater than 50'
+            ];
+        }
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/RTGSPayment/RTGSPayment', $body);
 
@@ -266,39 +292,39 @@ class NcbaLegacy
     /**
      * Allows sending money to a bank account via PesaLink
      * @param $beneficiaryAccountNumber - the beneficiary account number
-     * @param $beneficiaryAddress1 - the beneficiary address
      * @param $beneficiaryBankBIC - the beneficiary bank BIC
-     * @param $beneficiaryBankName - the beneficiary bank name
      * @param $beneficiaryName - the beneficiary name
      * @param $amount - the amount to send
      * @param $currency - the currency code e.g. KES
      * @param $narration - the narration
      * @param $senderAccountNumber - the sender account number
-     * @param $senderAddress1 - the sender address
      * @param $senderCIF - the sender CIF
      * @param $senderCountry - the sender country code
-     * @param $senderName - the sender name
      * @param $transactionID - the transaction ID
      */
 
-    public function pesalink($beneficiaryAccountNumber, $beneficiaryAddress1, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryName, $amount, $currency, $narration, $senderAccountNumber, $senderAddress1, $senderCIF, $senderCountry, $senderName, $transactionID)
+    public function pesalink($beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryName, $amount, $currency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $transactionID)
     {
         $body = [
-            'beneficiaryAccountNumber' => $beneficiaryAccountNumber,
-            'beneficiaryAddress1' => $beneficiaryAddress1,
-            'beneficiaryBankBIC' => $beneficiaryBankBIC,
-            'beneficiaryBankName' => $beneficiaryBankName,
-            'beneficiaryName' => $beneficiaryName,
-            'amount' => $amount,
-            'currency' => $currency,
-            'narration' => $narration,
-            'senderAccountNumber' => $senderAccountNumber,
-            'senderAddress1' => $senderAddress1,
-            'senderCIF' => $senderCIF,
-            'senderCountry' => $senderCountry,
-            'senderName' => $senderName,
-            'transactionID' => $transactionID,
+            "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
+            "BeneficiaryBankBIC" => $beneficiaryBankBIC,
+            "BeneficiaryName" => $beneficiaryName,
+            "Amount" => $amount,
+            "Currency" => $currency,
+            "Narration" => $narration,
+            "SenderAccountNumber" => $senderAccountNumber,
+            "SenderCIF" => $senderCIF,
+            "SenderCountry" => $senderCountry,
+            "TransactionID" => $transactionID
         ];
+
+        // amount must be > 50
+        if ($amount < 100) {
+            return [
+                'status' => 'error',
+                'message' => 'Amount must be greater than 50'
+            ];
+        }
 
         $result = $this->makeLegacyRequest($this->apiKey, $this->apiToken, $this->url . '/PesaLinkTransaction/pesaLinktransaction', $body);
 
@@ -311,5 +337,6 @@ class NcbaLegacy
         return $result;
     }
 
-    public function mpesa() {}
+    public function mpesa() {
+    }
 }
