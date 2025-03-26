@@ -57,3 +57,5 @@
 ## 0.1.5
 
 - Updates endpoints
+
+## 0.1.6
