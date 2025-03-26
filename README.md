@@ -57,6 +57,30 @@ An AP token is required to authenticate and use NCBA API's. Below is how to auth
 $ncba->authenticate();
 ```
 
+## Account Details
+
+Gets account details including account balance.
+
+```php
+$ncba->accountDetails($apiToken, $countryCode, $accountNo);
+```
+
+## Mini Statement
+
+Gets a mini statement for the account
+
+```php
+$ncba->miniStatement($apiToken, $countryCode, $accountNo);
+```
+
+## Account Statment
+
+Gets an account statement based on the the specified period of time. The date format is 'ddmmyyyy'
+
+```php
+$ncba->accountStatement($apiToken, $countryCode, $accountNo, $fromDate, $toDate);
+```
+
 ### Check Transaction Status
 
 ```php

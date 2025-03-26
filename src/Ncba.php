@@ -108,41 +108,6 @@ class Ncba
     }
 
     /**
-     * Get account summary for a given period
-     * @param $apiToken - the API token
-     * @param $countryCode - the country code
-     * @param $accountNo - the account number
-     * @param $fromDate - the start date - 26052022
-     * @param $toDate - the end date - '05062022'
-     */
-
-    public function accountSummary($apiToken, $countryCode, $accountNo, $fromDate, $toDate)
-    {
-        /*
-        "Country":"String", (Kenya/Uganda/Tanzania/Rwanda)
-        "AccountNo":" String", (NCBA linked account number)
-        "FromDate":"26052022",
-        "ToDate":"05062022"
-        */
-        $body = [
-            'Country' => $countryCode,
-            'AccountNo' =>  $accountNo,
-            'FromDate' => $fromDate,
-            'ToDate' => $toDate
-        ];
-
-        $result = $this->makeRequest($this->apiKey, $apiToken, $this->url . '/AccountStatement/accountstatement', $body);
-
-        if ($this->debugMode) {
-            info('------------------- Account Summary -------------------');
-            info('Account Summary request: ' . json_encode($body));
-            info('Account Summary result: ' . $result);
-        }
-
-        return $result;
-    }
-
-    /**
      * Get account statement for a given period
      * @param $apiToken - the API token
      * @param $countryCode - the country code
