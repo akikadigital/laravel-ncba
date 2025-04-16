@@ -59,3 +59,10 @@
 - Updates endpoints
 
 ## 0.1.6
+
+- Updates PESALINK
+
+
+## 0.1.7
+
+- Updates RTGS

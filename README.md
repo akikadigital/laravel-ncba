@@ -151,7 +151,7 @@ $response = $ncba->eft($apiToken, $amount, $beneficiaryAccountNumber, $beneficia
 ```php
 $ncba = new Ncba($apiKey, $username, $password);
 
-$response = $ncba->rtgs($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $purposeCode, $transactionID);
+$response = $ncba->rtgsrtgs($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $purposeCode, $transactionID);
 ```
 
 #### Payment Rules

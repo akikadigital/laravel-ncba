@@ -252,7 +252,6 @@ class Ncba
      * @param $apiToken - the API token
      * @param $beneficiaryAccountNumber - the beneficiary account number
      * @param $beneficiaryBankBIC - the beneficiary bank BIC
-     * @param $beneficiaryBankName - the beneficiary bank name
      * @param $beneficiaryCountry - the beneficiary country code - (Country- KE/UG/TZ/RW)
      * @param $beneficiaryName - the beneficiary name
      * @param $creditAmount - the amount to send - (Amount in whole numbers, no odd cents)
@@ -267,12 +266,11 @@ class Ncba
      * @param $transactionID - the transaction ID - (Alphanumeric Unique Reference)
      */
 
-    public function rtgs($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryBankName, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $senderName, $purposeCode, $transactionID)
+    public function rtgs($apiToken, $beneficiaryAccountNumber, $beneficiaryBankBIC, $beneficiaryCountry, $beneficiaryName, $creditAmount, $creditCurrency, $debitCurrency, $narration, $senderAccountNumber, $senderCIF, $senderCountry, $purposeCode, $transactionID)
     {
         $body = [
             "BeneficiaryAccountNumber" => $beneficiaryAccountNumber,
             "BeneficiaryBankBIC" => $beneficiaryBankBIC,
-            "BeneficiaryBankName" => $beneficiaryBankName,
             "BeneficiaryCountry" => $beneficiaryCountry,
             "BeneficiaryName" => $beneficiaryName,
             "CreditAmount" => $creditAmount,
@@ -280,9 +278,8 @@ class Ncba
             "CreditCurrency" => $creditCurrency,
             "Narration" => $narration,
             "SenderAccountNumber" => $senderAccountNumber,
-            "SenderCIF" => $senderCIF, // 
+            "SenderCIF" => $senderCIF,
             "SenderCountry" => $senderCountry,
-            "SenderName" => $senderName,
             "PurposeCode" => $purposeCode,
             "TransactionID" => $transactionID
         ];
