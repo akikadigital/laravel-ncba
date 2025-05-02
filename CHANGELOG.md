@@ -66,3 +66,7 @@
 ## 0.1.7
 
 - Updates RTGS
+
+## 0.1.8
+
+- Adds beneficiaryAddress to rtgs function
